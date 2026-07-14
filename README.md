@@ -7,9 +7,9 @@ with database support, a FastAPI REST API, and AI-powered features.
 
 - Add a task
 - List tasks
-- Complete a task
+- Mark a task as completed
 - Delete a task
-- Exit program
+- Exit the application
 
 ## Task Model
 
