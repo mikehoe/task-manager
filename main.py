@@ -1,5 +1,7 @@
 from services.task_service import TaskService
 
+task_service = TaskService()
+
 
 def show_menu() -> None:
     print("\nTASK MANAGER")
@@ -10,7 +12,14 @@ def show_menu() -> None:
     print("5. Exit the application")
 
 
-task_service = TaskService()
+def show_tasks() -> None:
+    tasks = task_service.list_tasks()
+    if not tasks:
+        print("No tasks found.")
+    else:
+        for index, task in enumerate(tasks, start=1):
+            print(f"{index}. {"[x]" if task.completed else "[ ]"} {task}")
+
 
 while True:
     show_menu()
@@ -22,12 +31,7 @@ while True:
             task_service.create_task(task_title)
             print("Task added.")
         case "2":
-            tasks = task_service.list_tasks()
-            if not tasks:
-                print("No tasks found.")
-            else:
-                for index, task in enumerate(tasks, start=1):
-                    print(f"{index}. {task}")
+            show_tasks()
         case "3":
             print(f"Your choice: {choice}")
         case "4":
