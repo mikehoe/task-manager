@@ -1,4 +1,5 @@
 from models.task import Task
+from services.task_service import TaskService
 
 
 def show_menu() -> None:
@@ -10,7 +11,8 @@ def show_menu() -> None:
     print("5. Exit the application")
 
 
-tasks: list[Task] = []
+task_service = TaskService()
+tasks = task_service.list_tasks()
 
 while True:
     show_menu()
@@ -18,10 +20,9 @@ while True:
         choice = int(input("Enter your choice: "))
         if choice == 1:
             task_title = input("Enter the task title: ")
-            task = Task(id=len(tasks) + 1, title=task_title)
-            tasks.append(task)
+            task = task_service.create_task(task_title)
             print("Task added.")
-        if choice == 2:
+        elif choice == 2:
             if not tasks:
                 print("No tasks found.")
             else:
