@@ -18,7 +18,7 @@ while True:
         choice = int(input("Enter your choice: "))
         if choice == 1:
             task_title = input("Enter the task title: ")
-            task = task_service.create_task(task_title)
+            task_service.create_task(task_title)
             print("Task added.")
         elif choice == 2:
             tasks = task_service.list_tasks()
