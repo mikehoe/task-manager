@@ -18,7 +18,8 @@ while True:
         choice = int(input("Enter your choice: "))
         if choice == 1:
             task_title = input("Enter the task title: ")
-            tasks.append(Task(task_title))
+            task = Task(id=len(tasks) + 1, title=task_title)
+            tasks.append(task)
             print("Task added.")
         if choice == 2:
             if not tasks:
