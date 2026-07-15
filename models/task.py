@@ -3,6 +3,6 @@ from dataclasses import dataclass
 
 @dataclass
 class Task:
-    task_id: int
+    id: int
     title: str
     completed: bool = False

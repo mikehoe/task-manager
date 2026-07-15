@@ -1,4 +1,4 @@
-from Task import Task
+from models.task import Task
 
 
 def show_menu() -> None:
