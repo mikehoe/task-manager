@@ -1,7 +1,5 @@
 from services.task_service import TaskService
 
-task_service = TaskService()
-
 
 def show_menu() -> None:
     print("\nTASK MANAGER")
@@ -12,7 +10,7 @@ def show_menu() -> None:
     print("5. Exit the application")
 
 
-def show_tasks() -> None:
+def show_tasks(task_service: TaskService) -> None:
     tasks = task_service.list_tasks()
     if not tasks:
         print("No tasks found.")
@@ -21,23 +19,31 @@ def show_tasks() -> None:
             print(f"{index}. {"[x]" if task.completed else "[ ]"} {task}")
 
 
-while True:
-    show_menu()
+def main() -> None:
+    task_service = TaskService()
 
-    choice = input("Enter your choice: ").strip()
-    match choice:
-        case "1":
-            task_title = input("Enter the task title: ")
-            task_service.create_task(task_title)
-            print("Task added.")
-        case "2":
-            show_tasks()
-        case "3":
-            print(f"Your choice: {choice}")
-        case "4":
-            print(f"Your choice: {choice}")
-        case '5':
-            print("Goodbye!")
-            break
-        case _:
-            print("Invalid option! Please enter a number between 1 and 5.")
+    while True:
+        show_menu()
+
+        choice = input("Enter your choice: ").strip()
+
+        match choice:
+            case "1":
+                task_title = input("Enter the task title: ")
+                task_service.create_task(task_title)
+                print("Task added.")
+            case "2":
+                show_tasks(task_service)
+            case "3":
+                print(f"Your choice: {choice}")
+            case "4":
+                print(f"Your choice: {choice}")
+            case "5":
+                print("Goodbye!")
+                break
+            case _:
+                print("Invalid option! Please enter a number between 1 and 5.")
+
+
+if __name__ == "__main__":
+    main()
