@@ -14,10 +14,16 @@ while True:
     try:
         choice = int(input("Enter your choice: "))
         if choice == 1:
-            task = input("Enter the task title: ")
-            tasks.append(task)
+            task_title = input("Enter the task title: ")
+            tasks.append(task_title)
             print("Task added.")
-        elif 2 <= choice <= 4:
+        if choice == 2:
+            if not tasks:
+                print("No tasks found.")
+            else:
+                for index, task in enumerate(tasks):
+                    print(f"{index + 1}. {task}")
+        elif 3 <= choice <= 4:
             print(f"Your choice: {choice}")
         elif choice == 5:
             print("Goodbye!")
