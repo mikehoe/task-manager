@@ -30,8 +30,11 @@ def main() -> None:
         match choice:
             case "1":
                 task_title = input("Enter the task title: ")
-                task_service.create_task(task_title)
-                print("Task added.")
+                try:
+                    task_service.create_task(task_title)
+                    print("Task added.")
+                except ValueError as error:
+                    print(f"Error: {error}")
             case "2":
                 show_tasks(task_service)
             case "3":

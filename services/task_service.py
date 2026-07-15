@@ -8,6 +8,11 @@ class TaskService:
         self._next_id = 1
 
     def create_task(self, title: str) -> Task:
+        title = title.strip()
+
+        if not title:
+            raise ValueError("Title cannot be empty")
+
         task = Task(id=self._next_id, title=title)
         self._tasks[task.id] = task
         self._next_id += 1

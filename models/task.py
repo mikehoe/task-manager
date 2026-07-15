@@ -8,4 +8,4 @@ class Task:
     completed: bool = False
 
     def __str__(self) -> str:
-        return f"{self.title}"
+        return self.title
