@@ -6,15 +6,23 @@ def show_menu() -> None:
     print("4. Delete a task")
     print("5. Exit the application")
 
+
+tasks = []
+
 while True:
     show_menu()
     try:
         choice = int(input("Enter your choice: "))
-        if 1 <= choice <= 4:
+        if choice == 1:
+            task = input("Enter the task title: ")
+            tasks.append(task)
+            print("Task added.")
+        elif 2 <= choice <= 4:
             print(f"Your choice: {choice}")
         elif choice == 5:
+            print("Goodbye!")
             break
         else:
-            print("Invalid option")
+            print("Invalid option.")
     except ValueError:
-        print("Invalid option")
+        print("Invalid option.")
