@@ -2,8 +2,6 @@ from models.task import Task
 
 
 class TaskService:
-    _tasks: dict[int, Task]
-    _next_id: int
 
     def __init__(self) -> None:
         self._tasks: dict[int, Task] = {}
