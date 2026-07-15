@@ -20,3 +20,10 @@ class TaskService:
 
     def list_tasks(self) -> list[Task]:
         return list(self._tasks.values())
+
+    def complete_task(self, task_id: int) -> bool:
+        if task_id not in self._tasks:
+            return False
+        task = self._tasks[task_id]
+        task.completed = True
+        return True

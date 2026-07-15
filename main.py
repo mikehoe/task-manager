@@ -11,7 +11,7 @@ def show_menu() -> None:
     print("5. Exit the application")
 
 
-def show_tasks(tasks:list[Task]) -> None:
+def show_tasks(tasks: list[Task]) -> None:
     if not tasks:
         print("No tasks found.")
     else:
@@ -35,15 +35,30 @@ def main() -> None:
                     print("Task added.")
                 except ValueError as error:
                     print(f"Error: {error}")
+
             case "2":
                 show_tasks(task_service.list_tasks())
+
             case "3":
-                print(f"Your choice: {choice}")
+                tasks = task_service.list_tasks()
+                show_tasks(tasks)
+                try:
+                    selected_number = int(input("Enter number of task you would complete: "))
+                    selected_task = tasks[selected_number - 1]
+                    if task_service.complete_task(selected_task.id):
+                        print(f"Task {selected_number}. {selected_task} completed!")
+                    else:
+                        print("Task not found.")
+                except ValueError:
+                    print("Invalid choice! Please enter a number.")
+
             case "4":
                 print(f"Your choice: {choice}")
+
             case "5":
                 print("Goodbye!")
                 break
+
             case _:
                 print("Invalid option! Please enter a number between 1 and 5.")
 
