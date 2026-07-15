@@ -5,12 +5,9 @@ class TaskService:
     _tasks: list[Task]
     _next_id: int
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._tasks = []
         self._next_id = 1
-
-    def __repr__(self):
-        return f"TaskService(id={self._next_id}, tasks={self._tasks})"
 
     def create_task(self, title: str) -> Task:
         task = Task(id=self._next_id, title=title)

@@ -1,4 +1,3 @@
-from models.task import Task
 from services.task_service import TaskService
 
 
@@ -12,7 +11,6 @@ def show_menu() -> None:
 
 
 task_service = TaskService()
-tasks = task_service.list_tasks()
 
 while True:
     show_menu()
@@ -23,6 +21,7 @@ while True:
             task = task_service.create_task(task_title)
             print("Task added.")
         elif choice == 2:
+            tasks = task_service.list_tasks()
             if not tasks:
                 print("No tasks found.")
             else:
