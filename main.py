@@ -1,3 +1,4 @@
+from models.task import Task
 from services.task_service import TaskService
 
 
@@ -10,8 +11,7 @@ def show_menu() -> None:
     print("5. Exit the application")
 
 
-def show_tasks(task_service: TaskService) -> None:
-    tasks = task_service.list_tasks()
+def show_tasks(tasks:list[Task]) -> None:
     if not tasks:
         print("No tasks found.")
     else:
@@ -36,7 +36,7 @@ def main() -> None:
                 except ValueError as error:
                     print(f"Error: {error}")
             case "2":
-                show_tasks(task_service)
+                show_tasks(task_service.list_tasks())
             case "3":
                 print(f"Your choice: {choice}")
             case "4":
