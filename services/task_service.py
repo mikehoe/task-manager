@@ -24,6 +24,7 @@ class TaskService:
     def complete_task(self, task_id: int) -> bool:
         if task_id not in self._tasks:
             return False
+
         task = self._tasks[task_id]
         task.completed = True
         return True

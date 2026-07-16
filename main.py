@@ -42,8 +42,9 @@ def main() -> None:
             case "3":
                 tasks = task_service.list_tasks()
                 show_tasks(tasks)
+
                 try:
-                    selected_number = int(input("Enter number of task you would complete: "))
+                    selected_number = int(input("Enter the number of the task to complete: "))
                     selected_task = tasks[selected_number - 1]
                     if task_service.complete_task(selected_task.id):
                         print(f"Task {selected_number}. {selected_task} completed!")
@@ -51,6 +52,8 @@ def main() -> None:
                         print("Task not found.")
                 except ValueError:
                     print("Invalid choice! Please enter a number.")
+                except IndexError:
+                    print("Invalid task number! Please enter a number from list of tasks if there any.")
 
             case "4":
                 print(f"Your choice: {choice}")
