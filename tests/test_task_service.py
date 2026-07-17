@@ -22,10 +22,10 @@ def test_create_task_strips_title(service: TaskService) -> None:
     assert task.title == "Learn pytest"
 
 
-def test_create_task_with_whitespace_only_title_raises_value_error(
-        service: TaskService) -> None:
+@pytest.mark.parametrize("title", ["", " ", "   ", "\t", "\n"])
+def test_invalid_titles_raise_value_error(service: TaskService, title: str) -> None:
     with pytest.raises(ValueError, match="Title cannot be empty"):
-        service.create_task("   ")
+        service.create_task(title)
 
 
 def test_list_tasks_returns_created_tasks(service: TaskService) -> None:
