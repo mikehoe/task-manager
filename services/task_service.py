@@ -28,3 +28,9 @@ class TaskService:
         task = self._tasks[task_id]
         task.completed = True
         return True
+
+    def delete_task(self, task_id: int) -> bool:
+        if task_id not in self._tasks:
+            return False
+        self._tasks.pop(task_id)
+        return True

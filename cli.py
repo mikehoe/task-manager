@@ -86,7 +86,19 @@ def main() -> None:
 
             case "4":
                 print(f"{separator()}\nDelete a task\n{separator()}")
-                print(f"Your choice: {choice}")
+
+                if not show_tasks():
+                    continue
+
+                selected_task = select_task()
+
+                if not selected_task:
+                    continue
+
+                if task_service.delete_task(selected_task.id):
+                    print(f"Task {selected_task} deleted!")
+                else:
+                    print("Task not found.")
 
             case "5":
                 print("Goodbye!")
