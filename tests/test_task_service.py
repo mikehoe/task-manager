@@ -3,9 +3,12 @@ import pytest
 from services.task_service import TaskService
 
 
-def test_create_task() -> None:
-    service = TaskService()
+@pytest.fixture
+def service() -> TaskService:
+    return TaskService()
 
+
+def test_create_task(service: TaskService) -> None:
     task = service.create_task("Learn pytest")
 
     assert task.id == 1
@@ -13,23 +16,19 @@ def test_create_task() -> None:
     assert task.completed is False
 
 
-def test_create_task_strips_title() -> None:
-    service = TaskService()
-
+def test_create_task_strips_title(service: TaskService) -> None:
     task = service.create_task("  Learn pytest  ")
 
     assert task.title == "Learn pytest"
 
 
-def test_create_task_with_whitespace_only_title_raises_value_error() -> None:
-    service = TaskService()
-
+def test_create_task_with_whitespace_only_title_raises_value_error(
+        service: TaskService) -> None:
     with pytest.raises(ValueError, match="Title cannot be empty"):
         service.create_task("   ")
 
 
-def test_list_tasks_returns_created_tasks() -> None:
-    service = TaskService()
+def test_list_tasks_returns_created_tasks(service: TaskService) -> None:
     first_task = service.create_task("First task")
     second_task = service.create_task("Second task")
 
@@ -38,16 +37,13 @@ def test_list_tasks_returns_created_tasks() -> None:
     assert tasks == [first_task, second_task]
 
 
-def test_list_tasks_returns_empty_list_initially() -> None:
-    service = TaskService()
-
+def test_list_tasks_returns_empty_list_initially(service: TaskService) -> None:
     tasks = service.list_tasks()
 
     assert tasks == []
 
 
-def test_complete_existing_task() -> None:
-    service = TaskService()
+def test_complete_existing_task(service: TaskService) -> None:
     task = service.create_task("Learn pytest")
 
     result = service.complete_task(task.id)
@@ -56,16 +52,13 @@ def test_complete_existing_task() -> None:
     assert task.completed is True
 
 
-def test_complete_missing_task() -> None:
-    service = TaskService()
-
+def test_complete_missing_task(service: TaskService) -> None:
     result = service.complete_task(999)
 
     assert result is False
 
 
-def test_delete_only_task_leaves_empty_list() -> None:
-    service = TaskService()
+def test_delete_only_task_leaves_empty_list(service: TaskService) -> None:
     task = service.create_task("Temporary task")
 
     result = service.delete_task(task.id)
@@ -74,8 +67,7 @@ def test_delete_only_task_leaves_empty_list() -> None:
     assert service.list_tasks() == []
 
 
-def test_delete_task_preserves_remaining_tasks() -> None:
-    service = TaskService()
+def test_delete_task_preserves_remaining_tasks(service: TaskService) -> None:
     task_to_keep = service.create_task("Keep this task")
     task_to_delete = service.create_task("Delete this task")
 
@@ -85,9 +77,7 @@ def test_delete_task_preserves_remaining_tasks() -> None:
     assert service.list_tasks() == [task_to_keep]
 
 
-def test_delete_missing_task() -> None:
-    service = TaskService()
-
+def test_delete_missing_task(service: TaskService) -> None:
     result = service.delete_task(999)
 
     assert result is False
