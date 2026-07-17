@@ -76,7 +76,7 @@ def main() -> None:
 
                 selected_task = select_task()
 
-                if not selected_task:
+                if selected_task is None:
                     continue
 
                 if task_service.complete_task(selected_task.id):
@@ -92,7 +92,7 @@ def main() -> None:
 
                 selected_task = select_task()
 
-                if not selected_task:
+                if selected_task is None:
                     continue
 
                 if task_service.delete_task(selected_task.id):
