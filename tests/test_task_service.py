@@ -64,7 +64,7 @@ def test_complete_missing_task() -> None:
     assert result is False
 
 
-def test_delete_existing_task() -> None:
+def test_delete_only_task_leaves_empty_list() -> None:
     service = TaskService()
     task = service.create_task("Temporary task")
 
@@ -72,6 +72,17 @@ def test_delete_existing_task() -> None:
 
     assert result is True
     assert service.list_tasks() == []
+
+
+def test_delete_task_preserves_remaining_tasks() -> None:
+    service = TaskService()
+    task_to_keep = service.create_task("Keep this task")
+    task_to_delete = service.create_task("Delete this task")
+
+    result = service.delete_task(task_to_delete.id)
+
+    assert result is True
+    assert service.list_tasks() == [task_to_keep]
 
 
 def test_delete_missing_task() -> None:
