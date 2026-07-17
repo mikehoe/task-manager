@@ -34,17 +34,17 @@ def show_tasks() -> bool:
 def select_task() -> Task | None:
     try:
         selected_number = int(input("Enter a number of the task: "))
-        tasks = task_service.list_tasks()
-
-        if selected_number < 1 or selected_number > len(tasks):
-            print("Invalid task number! Please enter a number from the list.")
-            return None
-
-        return tasks[selected_number - 1]
-
     except ValueError:
         print("Invalid choice! Please enter a number.")
         return None
+
+    tasks = task_service.list_tasks()
+
+    if selected_number < 1 or selected_number > len(tasks):
+        print("Invalid task number! Please enter a number from the list.")
+        return None
+
+    return tasks[selected_number - 1]
 
 
 def main() -> None:
