@@ -19,13 +19,16 @@ def show_menu() -> None:
 
 def show_tasks() -> bool:
     tasks = task_service.list_tasks()
+
     if not tasks:
         print("No tasks found.")
         return False
-    else:
-        for index, task in enumerate(tasks, start=1):
-            print(f"{index}. {"[x]" if task.completed else "[ ]"} {task}")
-        return True
+
+    for index, task in enumerate(tasks, start=1):
+        status = "[x]" if task.completed else "[ ]"
+        print(f"{index}. {status} {task}")
+
+    return True
 
 
 def select_task() -> Task | None:
