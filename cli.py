@@ -14,7 +14,8 @@ def show_menu() -> None:
     print("2. List tasks")
     print("3. Mark a task as completed")
     print("4. Delete a task")
-    print("5. Exit the application")
+    print("5. Edit a task")
+    print("6. Exit the application")
 
 
 def show_tasks() -> bool:
@@ -101,6 +102,25 @@ def main() -> None:
                     print("Task not found.")
 
             case "5":
+                print(f"{separator()}\nEdit a task title\n{separator()}")
+
+                if not show_tasks():
+                    continue
+
+                selected_task = select_task()
+
+                if selected_task is None:
+                    continue
+
+                old_title = selected_task.title
+                new_title = input("Enter a new task title: ")
+
+                if task_service.edit_task(selected_task.id, new_title):
+                    print(f"Task {old_title} edited to {selected_task}.")
+                else:
+                    print("Task not found.")
+
+            case "6":
                 print("Goodbye!")
                 break
 

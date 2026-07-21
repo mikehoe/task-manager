@@ -23,7 +23,8 @@ def test_create_task_strips_title(service: TaskService) -> None:
 
 
 @pytest.mark.parametrize("title", ["", " ", "   ", "\t", "\n"])
-def test_invalid_titles_raise_value_error(service: TaskService, title: str) -> None:
+def test_create_task_invalid_titles_raise_value_error(service: TaskService,
+                                                      title: str) -> None:
     with pytest.raises(ValueError, match="Title cannot be empty"):
         service.create_task(title)
 
@@ -81,3 +82,34 @@ def test_delete_missing_task(service: TaskService) -> None:
     result = service.delete_task(999)
 
     assert result is False
+
+
+def test_edit_existing_task(service: TaskService) -> None:
+    task = service.create_task("Learn Pytest")
+    new_title = "New title"
+    result = service.edit_task(task.id, new_title=new_title)
+
+    assert result is True
+    assert task.title == new_title
+
+
+def test_edit_missing_task(service: TaskService) -> None:
+    result = service.edit_task(999, "New title")
+
+    assert result is False
+
+
+def test_edit_task_strips_title(service: TaskService) -> None:
+    task = service.create_task("Learn Pytest")
+    result = service.edit_task(task.id, new_title="  New title  ")
+
+    assert result is True
+    assert task.title == "New title"
+
+
+@pytest.mark.parametrize("title", ["", " ", "   ", "\t", "\n"])
+def test_edit_task_invalid_titles_raise_value_error(service: TaskService, title: str) \
+        -> None:
+    task = service.create_task("Learn Pytest")
+    with pytest.raises(ValueError, match="Title cannot be empty"):
+        service.edit_task(task.id, title)
