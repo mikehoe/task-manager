@@ -116,7 +116,7 @@ def main() -> None:
                 new_title = input("Enter a new task title: ")
 
                 if task_service.edit_task(selected_task.id, new_title):
-                    print(f"Task {old_title} edited to {selected_task}.")
+                    print(f"Task edited: '{old_title}' → '{selected_task.title}'.")
                 else:
                     print("Task not found.")
 

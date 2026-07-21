@@ -1,7 +1,7 @@
 from models.task import Task
 
 
-def valid_task_title(title: str) -> str:
+def validate_task_title(title: str) -> str:
     title = title.strip()
 
     if not title:
@@ -17,7 +17,7 @@ class TaskService:
         self._next_id = 1
 
     def create_task(self, title: str) -> Task:
-        task = Task(id=self._next_id, title=valid_task_title(title))
+        task = Task(id=self._next_id, title=validate_task_title(title))
         self._tasks[task.id] = task
         self._next_id += 1
         return task
@@ -43,5 +43,5 @@ class TaskService:
         if task_id not in self._tasks:
             return False
         task = self._tasks[task_id]
-        task.title = valid_task_title(new_title)
+        task.title = validate_task_title(new_title)
         return True
