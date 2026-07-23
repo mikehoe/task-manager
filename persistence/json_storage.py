@@ -1,24 +1,41 @@
 import json
+from pathlib import Path
 
 from models.task import Task
 
 
 class JsonStorage:
-
-    def __init__(self, storage_path: str):
-        self.storage_path = storage_path
+    def __init__(self, storage_path: str | Path):
+        self.storage_path = Path(storage_path)
 
     def save(self, tasks: list[Task]) -> None:
-        with open(self.storage_path, "w") as json_file:
-            json.dump(
-                [self._task_to_dict(task) for task in tasks],
-                json_file,
-                indent=4,
-            )
+        temporary_path = self.storage_path.with_suffix(
+            self.storage_path.suffix + ".tmp"
+        )
+
+        serialized_tasks = [self._task_to_dict(task) for task in tasks]
+
+        try:
+            with temporary_path.open("w", encoding="utf-8") as json_file:
+                json.dump(
+                    serialized_tasks,
+                    json_file,
+                    indent=4,
+                    ensure_ascii=False,
+                )
+
+            temporary_path.replace(self.storage_path)
+
+        finally:
+            if temporary_path.exists():
+                temporary_path.unlink()
 
     def load(self) -> list[Task]:
-        with open(self.storage_path, "r") as json_file:
-            data = json.load(json_file)
+        try:
+            with self.storage_path.open("r", encoding="utf-8") as json_file:
+                data = json.load(json_file)
+        except FileNotFoundError as error:
+            return []
 
         return [self._dict_to_task(item) for item in data]
 
