@@ -115,10 +115,13 @@ def main() -> None:
                 old_title = selected_task.title
                 new_title = input("Enter a new task title: ")
 
-                if task_service.edit_task(selected_task.id, new_title):
-                    print(f"Task edited: '{old_title}' → '{selected_task.title}'.")
-                else:
-                    print("Task not found.")
+                try:
+                    if task_service.edit_task(selected_task.id, new_title):
+                        print(f"Task edited: '{old_title}' → '{selected_task.title}'.")
+                    else:
+                        print("Task not found.")
+                except ValueError as error:
+                    print(f"Error: {error}")
 
             case "6":
                 print("Goodbye!")
