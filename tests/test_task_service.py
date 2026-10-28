@@ -1,11 +1,38 @@
 import pytest
 
+from models.task import Task
 from services.task_service import TaskService
 
 
 @pytest.fixture
 def service() -> TaskService:
     return TaskService()
+
+
+def test_init_without_tasks() -> None:
+    service = TaskService()
+
+    assert service.list_tasks() == []
+    assert service.create_task("First task").id == 1
+
+
+def test_init_with_existing_tasks() -> None:
+    existing_tasks = [
+        Task(id=1, title="First task", completed=False),
+        Task(id=5, title="Second task", completed=True),
+    ]
+
+    service = TaskService(existing_tasks)
+
+    assert service.list_tasks() == existing_tasks
+    assert service.create_task("Third task").id == 6
+
+
+def test_init_with_empty_list() -> None:
+    service = TaskService([])
+
+    assert service.list_tasks() == []
+    assert service.create_task("First task").id == 1
 
 
 def test_create_task(service: TaskService) -> None:
