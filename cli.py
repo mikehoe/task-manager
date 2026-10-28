@@ -67,11 +67,17 @@ def main() -> None:
                 print(f"{separator()}\nAdd a task\n{separator()}")
 
                 task_title = input("Enter a task title: ")
+
                 try:
                     task_service.create_task(task_title)
-                    print("Task added.")
+                    storage.save(task_service.list_tasks())
                 except ValueError as error:
                     print(f"Error: {error}")
+                except OSError as error:
+                    print(f"Error saving tasks: {error}")
+                    return
+                else:
+                    print("Task added.")
 
             case "2":
                 print(f"{separator()}\nList tasks\n{separator()}")
@@ -90,6 +96,11 @@ def main() -> None:
                     continue
 
                 if task_service.complete_task(selected_task.id):
+                    try:
+                        storage.save(task_service.list_tasks())
+                    except OSError as error:
+                        print(f"Error saving tasks: {error}")
+                        return
                     print(f"Task {selected_task} completed!")
                 else:
                     print("Task not found.")
@@ -106,6 +117,11 @@ def main() -> None:
                     continue
 
                 if task_service.delete_task(selected_task.id):
+                    try:
+                        storage.save(task_service.list_tasks())
+                    except OSError as error:
+                        print(f"Error saving tasks: {error}")
+                        return
                     print(f"Task {selected_task} deleted!")
                 else:
                     print("Task not found.")
@@ -126,11 +142,15 @@ def main() -> None:
 
                 try:
                     if task_service.edit_task(selected_task.id, new_title):
+                        storage.save(task_service.list_tasks())
                         print(f"Task edited: '{old_title}' → '{selected_task.title}'.")
                     else:
                         print("Task not found.")
                 except ValueError as error:
                     print(f"Error: {error}")
+                except OSError as error:
+                    print(f"Error saving tasks: {error}")
+                    return
 
             case "6":
                 print("Goodbye!")
