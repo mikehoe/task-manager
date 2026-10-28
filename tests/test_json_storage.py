@@ -8,13 +8,15 @@ from persistence.json_storage import JsonStorage
 
 
 @pytest.fixture
-def storage(tmp_path) -> tuple[JsonStorage, Path]:
+def storage(tmp_path: Path) -> tuple[JsonStorage, Path]:
     file_path = tmp_path / "tasks.json"
 
     return JsonStorage(file_path), file_path
 
 
-def test_save_and_load_tasks(storage):
+def test_save_and_load_tasks(
+        storage: tuple[JsonStorage, Path],
+) -> None:
     json_storage, _ = storage
 
     tasks = [
@@ -27,13 +29,17 @@ def test_save_and_load_tasks(storage):
     assert json_storage.load() == tasks
 
 
-def test_load_returns_empty_list_when_file_does_not_exist(storage):
+def test_load_returns_empty_list_when_file_does_not_exist(
+        storage: tuple[JsonStorage, Path],
+) -> None:
     json_storage, _ = storage
 
     assert json_storage.load() == []
 
 
-def test_load_raises_error_when_json_is_invalid(storage):
+def test_load_raises_error_when_json_is_invalid(
+        storage: tuple[JsonStorage, Path],
+) -> None:
     json_storage, file_path = storage
 
     file_path.write_text('{"id": 1, "title": "Broken"', encoding="utf-8")
@@ -42,7 +48,9 @@ def test_load_raises_error_when_json_is_invalid(storage):
         json_storage.load()
 
 
-def test_save_writes_expected_json(storage):
+def test_save_writes_expected_json(
+        storage: tuple[JsonStorage, Path],
+) -> None:
     json_storage, file_path = storage
 
     json_storage.save([
@@ -65,7 +73,9 @@ def test_save_writes_expected_json(storage):
     ]
 
 
-def test_save_removes_temporary_file_after_success(storage):
+def test_save_removes_temporary_file_after_success(
+        storage: tuple[JsonStorage, Path],
+) -> None:
     json_storage, file_path = storage
 
     temporary_path = file_path.with_suffix(
@@ -81,9 +91,9 @@ def test_save_removes_temporary_file_after_success(storage):
 
 
 def test_save_preserves_original_file_when_replacement_fails(
-        storage,
-        monkeypatch,
-):
+        storage: tuple[JsonStorage, Path],
+        monkeypatch: pytest.MonkeyPatch,
+) -> None:
     json_storage, file_path = storage
 
     original_tasks = [
@@ -92,7 +102,7 @@ def test_save_preserves_original_file_when_replacement_fails(
 
     json_storage.save(original_tasks)
 
-    def raise_os_error(*args, **kwargs):
+    def raise_os_error(*args: object, **kwargs: object) -> None:
         raise OSError("Simulated replacement failure")
 
     monkeypatch.setattr(Path, "replace", raise_os_error)
