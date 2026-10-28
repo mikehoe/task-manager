@@ -101,7 +101,7 @@ def main() -> None:
                     except OSError as error:
                         print(f"Error saving tasks: {error}")
                         return
-                    print(f"Task {selected_task} completed!")
+                    print(f"Task '{selected_task}' completed!")
                 else:
                     print("Task not found.")
 
@@ -122,7 +122,7 @@ def main() -> None:
                     except OSError as error:
                         print(f"Error saving tasks: {error}")
                         return
-                    print(f"Task {selected_task} deleted!")
+                    print(f"Task '{selected_task}' deleted!")
                 else:
                     print("Task not found.")
 
