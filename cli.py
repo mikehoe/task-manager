@@ -1,8 +1,6 @@
 from models.task import Task
 from services.task_service import TaskService
 
-task_service = TaskService()
-
 
 def separator() -> str:
     return "-" * 80
@@ -18,7 +16,7 @@ def show_menu() -> None:
     print("6. Exit the application")
 
 
-def show_tasks() -> bool:
+def show_tasks(task_service: TaskService) -> bool:
     tasks = task_service.list_tasks()
 
     if not tasks:
@@ -32,7 +30,7 @@ def show_tasks() -> bool:
     return True
 
 
-def select_task() -> Task | None:
+def select_task(task_service: TaskService) -> Task | None:
     try:
         selected_number = int(input("Enter a number of the task: "))
     except ValueError:
@@ -49,6 +47,8 @@ def select_task() -> Task | None:
 
 
 def main() -> None:
+    task_service = TaskService()
+
     while True:
         show_menu()
         choice = input("Enter a number of your choice: ").strip()
@@ -67,15 +67,15 @@ def main() -> None:
             case "2":
                 print(f"{separator()}\nList tasks\n{separator()}")
 
-                show_tasks()
+                show_tasks(task_service)
 
             case "3":
                 print(f"{separator()}\nMark a task as completed\n{separator()}")
 
-                if not show_tasks():
+                if not show_tasks(task_service):
                     continue
 
-                selected_task = select_task()
+                selected_task = select_task(task_service)
 
                 if selected_task is None:
                     continue
@@ -88,10 +88,10 @@ def main() -> None:
             case "4":
                 print(f"{separator()}\nDelete a task\n{separator()}")
 
-                if not show_tasks():
+                if not show_tasks(task_service):
                     continue
 
-                selected_task = select_task()
+                selected_task = select_task(task_service)
 
                 if selected_task is None:
                     continue
@@ -104,10 +104,10 @@ def main() -> None:
             case "5":
                 print(f"{separator()}\nEdit a task title\n{separator()}")
 
-                if not show_tasks():
+                if not show_tasks(task_service):
                     continue
 
-                selected_task = select_task()
+                selected_task = select_task(task_service)
 
                 if selected_task is None:
                     continue
