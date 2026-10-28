@@ -34,10 +34,30 @@ class JsonStorage:
         try:
             with self.storage_path.open("r", encoding="utf-8") as json_file:
                 data = json.load(json_file)
-        except FileNotFoundError as error:
+        except FileNotFoundError:
             return []
 
-        return [self._dict_to_task(item) for item in data]
+        if not isinstance(data, list):
+            raise ValueError("JSON root must be a list")
+
+        tasks = []
+        seen_ids = set()
+
+        for index, item in enumerate(data):
+            if not isinstance(item, dict):
+                raise ValueError(
+                    f"Task at index {index} must be an object"
+                )
+
+            task = self._dict_to_task(item)
+
+            if task.id in seen_ids:
+                raise ValueError(f"Duplicate task ID: {task.id}")
+
+            seen_ids.add(task.id)
+            tasks.append(task)
+
+        return tasks
 
     @staticmethod
     def _task_to_dict(task: Task) -> dict[str, int | str | bool]:
@@ -49,8 +69,27 @@ class JsonStorage:
 
     @staticmethod
     def _dict_to_task(data: dict) -> Task:
+        required_keys = ("id", "title", "completed")
+
+        for key in required_keys:
+            if key not in data:
+                raise ValueError(f"Missing required key: {key}")
+
+        task_id = data["id"]
+        title = data["title"]
+        completed = data["completed"]
+
+        if type(task_id) is not int or task_id <= 0:
+            raise ValueError("Task ID must be a positive integer")
+
+        if not isinstance(title, str) or not title.strip():
+            raise ValueError("Task title must be a non-empty string")
+
+        if not isinstance(completed, bool):
+            raise ValueError("Task completed must be a boolean")
+
         return Task(
-            id=data["id"],
-            title=data["title"],
-            completed=data["completed"],
+            id=task_id,
+            title=title,
+            completed=completed,
         )
