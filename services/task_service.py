@@ -12,9 +12,12 @@ def validate_task_title(title: str) -> str:
 
 class TaskService:
 
-    def __init__(self) -> None:
-        self._tasks: dict[int, Task] = {}
-        self._next_id = 1
+    def __init__(self, tasks: list[Task] | None = None) -> None:
+        if tasks is None:
+            tasks = []
+
+        self._tasks: dict[int, Task] = {task.id: task for task in tasks}
+        self._next_id = max((task.id for task in tasks), default=0) + 1
 
     def create_task(self, title: str) -> Task:
         task = Task(id=self._next_id, title=validate_task_title(title))

@@ -1,4 +1,7 @@
+from json import JSONDecodeError
+
 from models.task import Task
+from persistence.json_storage import JsonStorage
 from services.task_service import TaskService
 
 
@@ -47,7 +50,13 @@ def select_task(task_service: TaskService) -> Task | None:
 
 
 def main() -> None:
-    task_service = TaskService()
+    storage = JsonStorage("tasks.json")
+
+    try:
+        task_service = TaskService(storage.load())
+    except (JSONDecodeError, ValueError, OSError) as error:
+        print(f"Error loading tasks: {error}")
+        return
 
     while True:
         show_menu()
